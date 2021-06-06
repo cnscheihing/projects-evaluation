@@ -102,6 +102,7 @@ b_i_l = {}  # 1 si interno i pertenece al segmento l, 0 en otro caso
 v_i = {}  # cantidad de salidas realizadas a tribunales por el interno i en un año
 u_i = {}  # cantidad de salidas realizadas a hospitales por el interno i en un año
 w_i = {}
+sigma = 0.1
 #### 5 Mantenciones ####
 omega_j_k = {}  # Distancia entre CP j y tribunal k
 rho_j_h = {}  # Distancia entre CP j y hospital h
@@ -186,6 +187,8 @@ def read_sheet():
                     pipi = float(record["valor"].replace(",", "."))
                 elif record["param"] == "lambda":
                     lambd = float(record["valor"].replace(",", "."))
+                elif record["param"] == "sigma":
+                    sigma = float(record["valor"].replace(",", "."))
             elif sheet == "Internos":
                 g_i_k[record["id_interno"]][record["id_tribunal_asignado"]] = 1
                 b_i_l[record["id_interno"]][record["id_segmento_asignado"]] = 1
@@ -250,6 +253,7 @@ def read_sheet():
         v_i,
         u_i,
         w_i,
+        sigma,
         omega_j_k,
         rho_j_h,
         lambd,

@@ -123,6 +123,7 @@ theta_j = 1  # Costo anual de funcionamiento del CP j
     v_i,
     u_i,
     w_i,
+    sigma,
     omega_j_k,
     rho_j_h,
     lambd,
