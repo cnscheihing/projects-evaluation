@@ -1,14 +1,7 @@
 from gurobipy import GRB, Model, quicksum
 import pandas as pd
+from read_sheet import build_params
 
-from utils import (
-    build_a_l,
-    build_c_j_k,
-    build_g_i_k,
-    build_d_i_j_and_build_b_i_l,
-    build_s_k,
-    build_p_j_l,
-)
 
 # MODELO
 model = Model(
@@ -119,8 +112,7 @@ segmentos = ["MI", "MC", "HI", "HC"]
 ###
 ###
 ###
-### LISTO DESDE ACA 
-###
+###        LISTO DESDE ACA 
 ###
 ###
 ###
@@ -167,6 +159,11 @@ pipi = 1  # Costo de mantención
 
 #### 6 Cierre de Centros Penitenciarios ####
 theta_j = 1  # Costo anual de funcionamiento del CP j
+
+
+
+internos, centros_penitenciarios, hospitales, alpha_j_k, beta_j_k, gamma_j_k, eta_j_h, zeta_j_h, tau_j_h, delta, epsilon, phi, c_j_k, s_j_h, g_i_k, b_i_l, v_i, u_i, omega_j_k, rho_j_h, lambd, pipi, theta_j = build_params()
+
 
 # VARIABLES
 x = model.addVars(
