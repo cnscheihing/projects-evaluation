@@ -10,7 +10,6 @@ SHEET_IDS = {
     "H": "776766230",
     "Distancias CP-Tribunal": "626115897",
     "Costo CP-Tribunal": "882126144",
-    "Viático CP-hospital": "1854938359",
     "Viático CP-tribunal": "1125681942",
     "Tribunal representante": "319525477",
 }
@@ -102,7 +101,7 @@ g_i_k = (
 b_i_l = {}  # 1 si interno i pertenece al segmento l, 0 en otro caso
 v_i = {}  # cantidad de salidas realizadas a tribunales por el interno i en un año
 u_i = {}  # cantidad de salidas realizadas a hospitales por el interno i en un año
-
+w_i = {}
 #### 5 Mantenciones ####
 omega_j_k = {}  # Distancia entre CP j y tribunal k
 rho_j_h = {}  # Distancia entre CP j y hospital h
@@ -129,6 +128,7 @@ def load_cp_h_data():
         b_i_l[i] = {}
         v_i[i] = 0
         u_i[i] = 0
+        w_i[i] = 0
         for k in tribunales:
             g_i_k[i][k] = 0
         for l in segmentos:
@@ -173,19 +173,19 @@ def read_sheet():
                 if record["param"] == "m":
                     m = float(record["valor"].replace(",", "."))
                 elif record["param"] == "n":
-                    n = float(record["valor"])
+                    n = float(record["valor"].replace(",", "."))
                 elif record["param"] == "mu":
-                    mu = float(record["valor"])
+                    mu = float(record["valor"].replace(",", "."))
                 elif record["param"] == "delta":
-                    delta = float(record["valor"])
+                    delta = float(record["valor"].replace(",", "."))
                 elif record["param"] == "epsilon":
-                    epsilon = float(record["valor"])
+                    epsilon = float(record["valor"].replace(",", "."))
                 elif record["param"] == "phi":
-                    phi = float(record["valor"])
+                    phi = float(record["valor"].replace(",", "."))
                 elif record["param"] == "pi":
-                    pipi = float(record["valor"])
+                    pipi = float(record["valor"].replace(",", "."))
                 elif record["param"] == "lambda":
-                    lambd = float(record["valor"])
+                    lambd = float(record["valor"].replace(",", "."))
             elif sheet == "Internos":
                 g_i_k[record["id_interno"]][record["id_tribunal_asignado"]] = 1
                 b_i_l[record["id_interno"]][record["id_segmento_asignado"]] = 1
@@ -203,6 +203,12 @@ def read_sheet():
                 s_j_h[record["id_CP"]][record["id_hospital_asociado"]] = float(
                     record["costo_hospital_asociado"].replace(",", ".")
                 )
+                if record['viatico_hospital_asociado'] == 10:
+                    eta_j_h[record["id_CP"]][record["id_hospital_asociado"]] = 1
+                elif record['viatico_hospital_asociado'] == 6:
+                    zeta_j_h[record["id_CP"]][record["id_hospital_asociado"]] = 1
+                elif record['viatico_hospital_asociado'] == 4:
+                    tau_j_h[record["id_CP"]][record["id_hospital_asociado"]] = 1
             elif sheet == "Distancias CP-Tribunal":
                 for k in tribunales:
                     omega_j_k[record["id_CP/id_tribunal"]][k] = float(
@@ -213,14 +219,6 @@ def read_sheet():
                     c_j_k[record["id_CP/id_tribunal"]][k] = float(
                         record[k].replace(",", ".")
                     )
-            elif sheet == "Viático CP-hospital":
-                for h in hospitales:
-                    if record[h] == 10:
-                        eta_j_h[record["id_CP/id_hospital"]][h] = 1
-                    elif record[h] == 6:
-                        zeta_j_h[record["id_CP/id_hospital"]][h] = 1
-                    elif record[h] == 4:
-                        tau_j_h[record["id_CP/id_hospital"]][h] = 1
             elif sheet == "Viático CP-tribunal":
                 for k in tribunales:
                     # print(record)
@@ -234,6 +232,8 @@ def read_sheet():
         internos,
         centros_penitenciarios,
         hospitales,
+        p_j_l,
+        d_j_h,
         alpha_j_k,
         beta_j_k,
         gamma_j_k,
@@ -249,6 +249,7 @@ def read_sheet():
         b_i_l,
         v_i,
         u_i,
+        w_i,
         omega_j_k,
         rho_j_h,
         lambd,
